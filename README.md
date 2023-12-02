@@ -1,2 +1,2 @@
 # aoc23
-Advent of Code 2023 (Deno)
+Thin is a humble attempt with TS and Deno on Advent of Code 2023
