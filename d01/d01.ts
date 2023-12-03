@@ -1,10 +1,7 @@
-async function readLines(): Promise<string[]> {
-    const path = "d01/input"; // Deno.args[0];
-    return (await Deno.readTextFile(path).then(text => text.split("\r\n"))).filter(s => s !== "");
-}
+import { readLines } from "../utils.ts";
 
 if (import.meta.main) {
-    const lines = await readLines();
+    const lines = await readLines("d01/input");
     const result = lines.map(ln => getNumbers(ln, 0, -1, -1)).reduce((pv, cv) => pv + cv, 0);
     console.log(result);
 }
