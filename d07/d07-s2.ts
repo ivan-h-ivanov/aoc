@@ -1,7 +1,7 @@
 import { readLines } from "../utils.ts";
 
-const cards: string[] = ["2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"];
-const patterns: string[] = ["11111", "1112", "122", "113", "23", "14", "5"];
+const cards: string[] = ["J", "2", "3", "4", "5", "6", "7", "8", "9", "T", "Q", "K", "A"];
+const patterns: string[] = ["11111", "2111", "221", "311", "32", "41", "5"];
 const handMultiplier = getHandMultiplier(5);
 
 if (import.meta.main) {
@@ -26,5 +26,7 @@ function getHandPower(hand: string): number {
         occurrences[cardStr]++;
         cardSum += Math.pow(cards.length, hand.length - 1 - i) * cardStr;
     }
-    return patterns.indexOf(occurrences.filter(v => v != 0).sort().join("")) * handMultiplier + cardSum;
+    const pattern = occurrences.splice(1, 12).sort((a, b) => b - a);
+    pattern[0] += occurrences[0];
+    return patterns.indexOf(pattern.filter(v => v != 0).join("")) * handMultiplier + cardSum;
 }
