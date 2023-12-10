@@ -4,31 +4,41 @@ class PipeType {
     [id: string]: string[]
 }
 
-interface crd {
+export interface crd {
     X: number;
     Y: number;
 }
 
 if (import.meta.main) {
     const lines = await readLines("d10/input");
+    console.log(getPath(lines).length);
+}
+
+export function getPath(lines: string[], close: boolean = false): crd[] {
     const map = lines.map(ln => ln.split(""));
     const pT = initPipes();
     const start: crd = {};
     for (let i = 0; i < map.length; i++)
         for (let j = 0; j < map[i].length; j++)
             if (map[i][j] === "S") {
-                start.X = j; start.Y = i;
+                start.Y = i; start.X = j;
             }
-    const res = traverse(pT, map, start, [], []);
-    console.log(res.length);
+    const result = traverse(pT, map, start, [], []);
+    if (close) {
+        result.push(result[0]);
+    }
+    return result;
 }
 
 function traverse(pt: PipeType, map: string[][], head: crd, visited: string[], traverseStack: crd[]): crd[] {
     visited.push(`${head.Y},${head.X}`)
     const children = getChildren(pt, map, head).filter(ch => visited.indexOf(`${ch.Y},${ch.X}`) === -1);
     for (let i = 0; i < children.length; i++) {
-        return traverse(pt, map, children[i], [...visited, `${children[i].Y},${children[i].X}`], [...traverseStack, children[i]]);
+        visited.push(`${children[i].Y},${children[i].X}`);
+        traverseStack.push(children[i]);
+        return traverse(pt, map, children[i], visited, traverseStack);
     }
+    traverseStack.push(head);
     return traverseStack;
 }
 
